@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4022.12">
+  <POU Name="FB_Server" Id="{83d78e1b-da3e-4c94-a4c2-557541fc1fe5}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Server
+VAR_IN_OUT
+	hServer			: T_HSERVER;(* Server connection handle *)
+END_VAR
+VAR_INPUT
+	sSrvNetID		: T_AmsNetID	:= '';(* TwinCAT TCP/IP server network address *)
+	bEnable			: BOOL 			:= FALSE;(* TRUE => enable server data exchange, FALSE => disable *)
+	bLog			: BOOL 			:= FALSE;(* TRUE => Enable log message output, FALSE => Disable *)
+	sPrefix			: STRING 		:= 'SERVER::';(* Log message description string (allows the identification of log message source) *)
+END_VAR
+VAR_OUTPUT
+	eState			: E_SocketConnectionState := eSOCKET_DISCONNECTED;(* TCP/IP connection state *)
+END_VAR
+VAR
+	fbApplication	: FB_ServerApplication;(* Server application control function block *)
+	fbConnection	: FB_ServerConnection;(* Server data exchange control function block. Implements one server<->client connection *)
+	fbTx 			: FB_FrameFifo;(* Tx fifo *)
+	fbRx 			: FB_FrameFifo;(* Rx fifo *)
+	fbLog			: FB_LogFifo;(* Log/debug/error fifo *)
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[(*-------------------------------- Trigger data exchange -----------------------------------------*)
+fbConnection( hServer := hServer, sSrvNetID := sSrvNetID, fbRx := fbRx, fbTx := fbTx, fbLog := fbLog, 
+			bEnable := bEnable, bLog := bLog, sPrefix := sPrefix, eState => eState );
+IF fbConnection.eState = eSOCKET_CONNECTED THEN(* Connection established *)
+	fbApplication( fbTx := fbTx, fbRx := fbRx, fbLog := fbLog );
+END_IF
+]]></ST>
+    </Implementation>
+    <LineIds Name="FB_Server">
+      <LineId Id="3" Count="5" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

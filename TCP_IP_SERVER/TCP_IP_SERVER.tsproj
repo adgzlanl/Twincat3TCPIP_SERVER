@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4022.22">
+	<Project ProjectGUID="{E048D347-10A6-47CB-93C1-C3EB0E682434}" TargetNetId="192.168.0.4.1.1" ShowHideConfigurations="#x306">
+		<System>
+			<Settings MaxCpus="4">
+				<Cpu CpuId="3"/>
+			</Settings>
+			<Tasks>
+				<Task Id="2" Priority="20" CycleTime="1000000" AmsPort="350" AdtTasks="true">
+					<Name>PlcTask</Name>
+				</Task>
+				<Task Id="4" Priority="21" CycleTime="100000" AmsPort="351" AdtTasks="true">
+					<Name>PlcTaskServer</Name>
+				</Task>
+				<Task Id="5" Priority="1" CycleTime="100000" AmsPort="352" AdtTasks="true">
+					<Name>PlcTask1</Name>
+				</Task>
+			</Tasks>
+		</System>
+		<Plc>
+			<Project GUID="{B476DF57-04D4-4E38-9C5E-0B07F82143B9}" Name="TCPServer" PrjFilePath="TCPServer\TCPServer.plcproj" TmcFilePath="TCPServer\TCPServer.tmc" ReloadTmc="true" AmsPort="852" FileArchiveSettings="#x000e" SymbolicMapping="true">
+				<Instance Id="#x08502040" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2">
+					<Name>TCPServer Instance</Name>
+					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
+					<TaskPouOids>
+						<TaskPouOid Prio="1" OTCID="#x08502041"/>
+					</TaskPouOids>
+				</Instance>
+			</Project>
+		</Plc>
+	</Project>
+</TcSmProject>
